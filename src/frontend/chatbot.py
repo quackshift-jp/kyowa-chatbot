@@ -4,6 +4,8 @@ import pathlib
 import sys
 import streamlit as st
 from datetime import datetime, timedelta
+sys.path.append("/Users/kazukikomura/Developer/quackshift/kyowa-chatbot/src")
+from backend.rag import rag_chatbot
 
 def render():
     sys.path.append(str(pathlib.Path().absolute()))
@@ -82,23 +84,21 @@ def render():
         with st.chat_message("assistant"):
             with st.spinner("回答生成中..."):
                 time.sleep(2)
-                # TODO: rag_main.pyを呼び出す
-                #result=rag_main(prompt)
-                result = "hogehogeに関する情報は現在利用できません。"
-            # TODO: rag_main.pyから呼び出す 
-            source_details = [
-                {"id":"12345","title": "AIの未来", "published_at": "2023-10-01T12:00:00"},
-                {"id":"12345","title": "Pythonの進化", "published_at": "2023-09-15T08:30:00"}
-            ]
+
+                response=rag_chatbot(prompt)
+                result=response["result"]
+                source_details=response["source_details"]
+                
+
 
             if source_details:
-                details_message = f'<span style="color: grey; font-size: small;">参考記事は以下の通りです。</span>  \n'
+                details_message = f'<span style="color: grey; font-size: small;">参考資料は以下の通りです。</span>  \n'
                 for detail in source_details:
-                    news_url = f'https://hogehoge/{detail["id"]}'
+                    news_url = f'{detail["id"]}'
                     details_message += (
                         f'<span style="color: grey; font-size: small;">'
-                        f'タイトル: {detail["title"]}  \n'
-                        f'公開日: {(datetime.fromisoformat(detail["published_at"]) + timedelta(hours=9)).date()}</span>  \n'
+                        #f'タイトル: {detail["title"]}  \n'
+                        #f'公開日: {(datetime.fromisoformat(detail["published_at"]) + timedelta(hours=9)).date()}</span>  \n'
                         f'<span style="color: grey; font-size: small;">'
                         f'記事URL: <a href="{news_url}">{news_url}</a></span>  \n\n'
                     )
