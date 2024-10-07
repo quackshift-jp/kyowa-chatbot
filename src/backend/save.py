@@ -53,8 +53,13 @@ def save_vector_store(chunked_documents: list[Document], save_dir: str) -> None:
 
 def save(data_dir: str) -> None:
     documents = load_documents(data_dir)
+    print(f"Loaded {len(documents)} documents.")
     chunked_documents = split_documents_to_chunk(documents)
+    print(f"Split {len(chunked_documents)} documents")
     save_vector_store(chunked_documents, FAISS_DB_DIR)
+
+if __name__ == "__main__":
+    save("data")
 
 
 
