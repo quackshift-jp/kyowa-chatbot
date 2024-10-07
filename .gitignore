@@ -1,4 +1,6 @@
 .streamlit
 .venv
 data
+.env
+vectorstore
             
